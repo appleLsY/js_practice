@@ -1,0 +1,164 @@
+<!DOCTYPE>
+<html>
+
+<head>
+    <script src="js/vue.js"></script>
+
+</head>
+
+<body>
+    <!--<script type="text/javascript">
+        function VNode(tag, data, children, text) {
+            return {
+                tag: tag,
+                data: data,
+                children: children,
+                text: text
+            }
+        }
+
+        class Vue {
+            constructor(options) {
+                this.$options = options
+                this._data = options.data
+                Object.keys(options.data).forEach(key => this._proxy(key))
+                observer(options.data)
+                const vdom = watch(this, this._render.bind(this), this._update.bind(this))
+                console.log(vdom)
+            }
+            _proxy(key) {
+                const self = this
+                Object.defineProperty(self, key, {
+                    configurable: true,
+                    enumerable: true,
+                    get: function proxyGetter() {
+                        return self._data[key]
+                    },
+                    set: function proxySetter(val) {
+                        self._data.text = val
+                    }
+                })
+            }
+            _update() {
+                console.log("我需要更新");
+                const vdom = this._render.call(this)
+                console.log(vdom);
+            }
+            _render() {
+                return this.$options.render.call(this)
+            }
+            __h__(tag, attr, children) {
+                return VNode(tag, attr, children.map((child) => {
+                    if (typeof child === 'string') {
+                        return VNode(undefined, undefined, undefined, child)
+                    } else {
+                        return child
+                    }
+                }))
+            }
+            __toString__(val) {
+                return val == null ? '' : typeof val === 'object' ? JSON.stringify(val, null, 2) : String(val);
+            }
+        }
+
+        function observer(value, cb) {
+            Object.keys(value).forEach((key) => defineReactive(value, key, value[key], cb))
+        }
+
+        function defineReactive(obj, key, val, cb) {
+            const dep = new Dep()
+            Object.defineProperty(obj, key, {
+                enumerable: true,
+                configurable: true,
+                get: () => {
+                    if (Dep.target) {
+                        dep.add(Dep.target)
+                    }
+                    return val
+                },
+                set: newVal => {
+                    if (newVal === val)
+                        return
+                    val = newVal
+                    dep.notify()
+                }
+            })
+        }
+
+        function watch(vm, exp, cb) {
+            Dep.target = cb
+            return exp()
+        }
+
+        class Dep {
+            constructor() {
+                this.subs = []
+            }
+            add(cb) {
+                this.subs.push(cb)
+            }
+            notify() {
+                this.subs.forEach((cb) => cb())
+            }
+        }
+        Dep.target = null
+
+
+        var demo = new Vue({
+            el: '#demo',
+            data: {
+                text: "before",
+            },
+            render() {
+                return this.__h__('div', {}, [
+                    this.__h__('span', {}, [this.__toString__(this.text)])
+                ])
+            }
+        })
+
+
+        setTimeout(function () {
+            demo.text = "after"
+        }, 3000)
+    </script>-->
+    <script type="text/javascript">
+        // var data={
+        //     user:{
+        //         name:"liushuyu",
+        //         age:18
+        //     },
+        //     address:{
+        //         city:"chongqing"
+        //     }
+        // }
+        // Object.defineProperties()
+        // var a = {};
+        // Object.defineProperty(a, "b", {
+        //     set: function (newValue) {
+        //         console.log("你要赋值给我,我的新值是" + newValue)
+        //     },
+        //     get: function () {
+        //         console.log("你取我的值");
+        //         return 2; //注意这里，我硬编码返回2
+        //     }
+        // })
+        // a.b = 1; //打印 你要赋值给我,我的新值是1
+        // console.log(a.b); //打印 你取我的值
+        // //打印 2    注意这里，和我的硬编码相同的
+
+        var v = new Vue({
+            data: {
+                a: 1,
+                b: 2
+            }
+        })
+        v.$watch("a", () => console.log("哈哈，$watch成功"));   //=>具体内容明天看
+        setTimeout(() => {
+            v.a = 5
+        }, 2000)
+        console.log("你设置的值为"+v.a);
+        //剩下的明天了解
+    </script>
+</body>
+
+</html>
