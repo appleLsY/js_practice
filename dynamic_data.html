@@ -3,7 +3,6 @@
 
 <head>
     <script src="js/vue.js"></script>
-
 </head>
 
 <body>
@@ -122,13 +121,13 @@
         }, 3000)
     </script>-->
     <script type="text/javascript">
-        // var data={
-        //     user:{
-        //         name:"liushuyu",
-        //         age:18
+        // var data = {
+        //     user: {
+        //         name: "liushuyu",
+        //         age: 18
         //     },
-        //     address:{
-        //         city:"chongqing"
+        //     address: {
+        //         city: "chongqing"
         //     }
         // }
         // Object.defineProperties()
@@ -146,18 +145,139 @@
         // console.log(a.b); //打印 你取我的值
         // //打印 2    注意这里，和我的硬编码相同的
 
-        var v = new Vue({
-            data: {
-                a: 1,
-                b: 2
+        // var v = new Vue({
+        //     data: {
+        //         a: 1,
+        //         b: 2
+        //     }
+        // })
+        // v.$watch("a", () => console.log("哈哈，$watch成功")); //=>具体内容明天看
+        // setTimeout(() => {
+        //     v.a = 5
+        // }, 2000)
+        // console.log("你设置的值为" + v.a);
+        // //剩下的明天了解
+
+        // // 观察者构造函数
+        // function Observer(data) {
+        //     this.data = data;
+        //     this.walk(data)
+        // }
+
+        // let p = Observer.prototype;
+
+        // // 此函数用于深层次遍历对象的各个属性
+        // // 采用的是递归的思路
+        // // 因为我们要为对象的每一个属性绑定getter和setter
+        // p.walk = function (obj) {
+        //     let val;
+        //     for (let key in obj) {
+        //         // 这里为什么要用hasOwnProperty进行过滤呢？
+        //         // 因为for...in 循环会把对象原型链上的所有可枚举属性都循环出来
+        //         // 而我们想要的仅仅是这个对象本身拥有的属性，所以要这么做。
+        //         if (obj.hasOwnProperty(key)) {
+        //             val = obj[key];
+
+        //             // 这里进行判断，如果还没有遍历到最底层，继续new Observer
+        //             if (typeof val === 'object') {
+        //                 new Observer(val);
+        //             }
+
+        //             this.convert(key, val);
+        //         }
+        //     }
+        // };
+
+        // p.convert = function (key, val) {
+        //     Object.defineProperty(this.data, key, {
+        //         enumerable: true,
+        //         configurable: true,
+        //         get: function () {
+        //             console.log('你访问了' + key);
+        //             return val
+        //         },
+        //         set: function (newVal) {
+        //             console.log('你设置了' + key);
+        //             console.log('新的' + key + ' = ' + newVal)
+        //             if (newVal === val) return;
+        //             val = newVal
+        //         }
+        //     })
+        // };
+
+        // let data = {
+        //     user: {
+        //         name: "liangshaofeng",
+        //         age: "24"
+        //     },
+        //     address: {
+        //         city: "beijing"
+        //     }
+        // };
+
+        // let app = new Observer(data);
+
+
+
+
+
+
+
+        function Observer(information){
+            this.information=information;
+            //遍历属性
+            this.walk(information);
+        }
+
+
+        let p=Observer.prototype;
+        console.log(p);
+        console.log(p===Observer.prototype);    //p相当于就是Observer.prototype
+        p.walk=function(obj){
+            let val;
+            for(let key in obj){
+                if(obj.hasOwnProperty(key)){
+                    val=obj[key];
+                    if(typeof val==='object'){
+                        new Observer(val);
+                    }
+                    //进行监听
+                    this.converse(key,val)
+                }
             }
-        })
-        v.$watch("a", () => console.log("哈哈，$watch成功"));   //=>具体内容明天看
-        setTimeout(() => {
-            v.a = 5
-        }, 2000)
-        console.log("你设置的值为"+v.a);
-        //剩下的明天了解
+        };
+        p.converse=function(key,val){
+            Object.defineProperty(this.information,key,{    //因为这里指的是information，所以在控制端那里要用information来进行控制
+                configurable:true,
+                enumerable:true,
+                get:function(){
+                    console.log("你访问了"+key);
+                    return val;
+                },
+                set:function(newVal){
+                    if(typeof newVal==="object"){
+                        new Observer(newVal);
+                    }
+                    console.log("你设置了"+key);
+                    console.log("新的"+key+"="+newVal);
+                    if(newVal===val) return;
+                    val=newVal;
+                }
+            })
+        };
+        let information={
+            uuser:{
+                firstname:'xiong',
+                lastname:'bear',
+                waihao:'pangzi'
+            },
+            dress:{
+                old:'chongq',
+                newdress:'beijing',
+                future:'myheart'
+            }
+        }
+        let bew=new Observer(information);
     </script>
 </body>
 
